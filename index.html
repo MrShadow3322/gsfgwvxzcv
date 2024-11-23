@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketplace</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1a1d2e;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+    .header, .footer {
+      background-color: #23263a;
+      padding: 10px;
+      text-align: center;
+    }
+    .nav {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      background-color: #2e3140;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+    .nav a {
+      color: #ffffff;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    .nav a:hover {
+      background-color: #5567a6;
+      transform: scale(1.1);
+    }
+    .nav a.active {
+      background-color: #40568a;
+      transform: scale(1.1);
+    }
+    .content {
+      padding: 20px;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+    .categories, .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .category, .button {
+      background-color: #2e3140;
+      padding: 20px;
+      border-radius: 10px;
+      transition: background-color 0.3s, transform 0.3s;
+      cursor: pointer;
+    }
+    .category:hover, .button:hover {
+      background-color: #5567a6;
+      transform: scale(1.1);
+    }
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .form input, .form textarea {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #2e3140;
+      color: #ffffff;
+      transition: background-color 0.3s;
+    }
+    .form input:focus, .form textarea:focus {
+      background-color: #35405d;
+      outline: none;
+    }
+    .form button {
+      background-color: #5567a6;
+      color: #ffffff;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    .form button:hover {
+      background-color: #40568a;
+    }
+    .search-bar input {
+      width: 80%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #2e3140;
+      color: #ffffff;
+      text-align: center;
+      transition: background-color 0.3s;
+    }
+    .search-bar input:focus {
+      background-color: #35405d;
+      outline: none;
+    }
+    .search-results {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .search-result {
+      background-color: #2e3140;
+      padding: 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    .search-result:hover {
+      background-color: #5567a6;
+      transform: scale(1.05);
+    }
+    .seller-button {
+      margin-top: 50px;
+      background-color: #5567a6;
+      color: #ffffff;
+      border: none;
+      padding: 15px;
+      border-radius: 50px;
+      width: 80%;
+      max-width: 300px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      animation: pulse 2s infinite;
+      transition: transform 0.3s;
+    }
+    .seller-button:hover {
+      transform: scale(1.1);
+      background-color: #40568a;
+    }
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>Marketplace</h1>
+  </header>
+  <nav class="nav">
+    <a href="javascript:void(0);" id="main-link" onclick="showPage('main')">Главная</a>
+    <a href="javascript:void(0);" id="search-link" onclick="showPage('search')">Поиск</a>
+    <a href="javascript:void(0);" id="profile-link" onclick="showPage('profile')">Профиль</a>
+  </nav>
+  <main class="content">
+    <!-- Главная -->
+    <section id="main" class="page">
+      <h2>Добро пожаловать на Marketplace</h2>
+      <div class="buttons">
+        <div class="button" onclick="showCategories()">Категории</div>
+        <div class="button" onclick="showAllProducts()">Все товары</div>
+      </div>
+      <div class="categories" id="categories" style="display: none;">
+        <div class="category" onclick="showCategory('home')">Для дома</div>
+        <div class="category" onclick="showCategory('tech')">Техника</div>
+        <div class="category" onclick="showCategory('clothes')">Одежда</div>
+      </div>
+      <button class="seller-button" onclick="openSellerForm()">Стать продавцом</button>
+    </section>
+    <!-- Поиск -->
+    <section id="search" class="page" style="display: none;">
+      <h2>Поиск товаров</h2>
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Введите запрос для поиска" oninput="searchProducts()">
+      </div>
+      <div id="search-results" class="search-results"></div>
+    </section>
+    <!-- Профиль -->
+    <section id="profile" class="page" style="display: none;">
+      <h2>Профиль</h2>
+      <p>Ваш уникальный ID: <span id="user-id"></span></p>
+    </section>
+  </main>
+  <footer class="footer">
+    Marketplace © 2024
+  </footer>
+  <script>
+    const CHAT_ID = '1258306425';
+    const BOT_TOKEN = '7262467632:AAGv2FmMkHDcQKzYSLbw1VNtdapGi1pAw40';
+
+    function getUserId() {
+      let userId = localStorage.getItem('userId');
+      if (!userId) {
+        userId = 'USER-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        localStorage.setItem('userId', userId);
+      }
+      return userId;
+    }
+
+    document.getElementById('user-id').textContent = getUserId();
+
+    function showPage(pageId) {
+      document.querySelectorAll(".page").forEach(page => {
+        page.style.display = "none";
+      });
+      document.getElementById(pageId).style.display = "block";
+      document.querySelectorAll(".nav a").forEach(link => {
+        link.classList.remove('active');
+      });
+      document.getElementById(pageId + "-link").classList.add('active');
+    }
+
+    function showCategories() {
+      const categories = document.getElementById('categories');
+      categories.style.display = categories.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    function showAllProducts() {
+      const allProducts = Object.values(categories).flat();
+      alert(`Все товары:\n${allProducts.map(p => p.title).join(', ')}`);
+    }
+
+    const categories = {
+      'home': [
+        { id: 1, title: 'Уютный диван', description: 'Мягкий и удобный диван.', price: 1200 },
+        { id: 2, title: 'Стол', description: 'Комплект мебели.', price: 2000 }
+      ],
+      'tech': [
+        { id: 3, title: 'Смартфон', description: 'Мощный и компактный.', price: 500 },
+        { id: 4, title: 'Ноутбук', description: 'Современный и лёгкий.', price: 1200 },
+      ],
+      'clothes': [{ id: 5, title: 'Куртка', description: 'Классическая.', price: 40 }],
+    };
+  </script>
+</body>
+</html>
